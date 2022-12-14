@@ -799,7 +799,13 @@ class Base(object):
                     for keys, row, *primary_keys in partition:
                         yield keys, row, primary_keys
             except Exception as e:
-                print("QUERY_ST", statement)
+                query = str(
+                    statement.compile(
+                        dialect=sa.dialects.postgresql.dialect(),
+                        compile_kwargs={"literal_binds": True},
+                    )
+                )
+                print("QUERY_ST", query)
                 raise e
             result.close()
         self.engine.clear_compiled_cache()
