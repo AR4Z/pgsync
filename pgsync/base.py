@@ -794,9 +794,13 @@ class Base(object):
             result = conn.execution_options(
                 stream_results=stream_results
             ).execute(statement.select())
-            for partition in result.partitions(chunk_size):
-                for keys, row, *primary_keys in partition:
-                    yield keys, row, primary_keys
+            try:
+                for partition in result.partitions(chunk_size):
+                    for keys, row, *primary_keys in partition:
+                        yield keys, row, primary_keys
+            except Exception as e:
+                print("QUERY_ST", statement)
+                raise e
             result.close()
         self.engine.clear_compiled_cache()
 
