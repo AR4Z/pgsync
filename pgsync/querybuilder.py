@@ -8,6 +8,7 @@ from .base import compiled_query, TupleIdentifierType
 from .constants import OBJECT, ONE_TO_MANY, ONE_TO_ONE, SCALAR
 from .exc import ForeignKeyError
 from .node import Node
+from .settings import JSON_CHUNK_SIZE
 
 
 class QueryBuilder(object):
@@ -56,6 +57,7 @@ class QueryBuilder(object):
         with the 100 arguments limit this implies we can only select 50 columns
         at a time.
         """
+        chunk_size = JSON_CHUNK_SIZE
         i: int = 0
         expression: sa.sql.elements.BinaryExpression = None
         while i < len(columns):
